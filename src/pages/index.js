@@ -13,7 +13,7 @@ export default function Home(props) {
           <Link href="/posts/[id]" as={`/posts/${post.slug}`}>
             <div
               key={post.slug}
-              className="dark:text-white border-b border-t border-gray-400 dark:border-gray-300 p-1 py-5 hover:opacity-75 cursor-pointer "
+              className="dark:text-white border-b border-t border-gray-400 dark:border-gray-300 p-1 py-5 sm:hover:opacity-75 cursor-pointer "
             >
               <h2>
                 <a>{post.title}</a>
