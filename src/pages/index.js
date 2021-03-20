@@ -1,22 +1,41 @@
-import Image from "next/image";
+import fs from "fs";
+import Link from "next/link";
+import Layout from "../components/Layout";
+import { readContentFiles } from "../lib/content-loader";
 
-export default function Home() {
+export default function Home(props) {
+  const { posts } = props;
+
   return (
-    <div className="dark:bg-black-dark h-screen ">
-      <div className="w-screen h-3 bg-green"></div>
-      <div className="container mx-auto ">
-        <div>
-          <div className="flex items-center justify-center pt-10">
-            <Image src="/logo.svg" width="100" height="100" />
-            <h1 className="text-center text-green font-sans text-4xl font-bold sm:text-5xl pl-4 mt-4">
-              MTea Blog
-            </h1>
-          </div>
-          <p className="text-center text-black dark:text-white text-xl  py-10 sm:text-2xl">
-            - プログラミングとかデザインとか -
-          </p>
-        </div>
+    <Layout title="">
+      <div className="mx-auto w-11/12 bg-white dark:bg-black-light p-5 rounded max-w-screen-lg sm:p-10 ">
+        {posts.map((post) => (
+          <Link href="/posts/[id]" as={`/posts/${post.slug}`}>
+            <div
+              key={post.slug}
+              className="dark:text-white border-b border-t border-gray-400 dark:border-gray-300 p-1 py-5 hover:opacity-75 cursor-pointer "
+            >
+              <h2>
+                <a>{post.title}</a>
+              </h2>
+              <div>
+                <span>{post.published}</span>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
-    </div>
+    </Layout>
   );
+}
+
+export async function getStaticProps({ params }) {
+  const MAX_COUNT = 5;
+  const posts = await readContentFiles({ fs });
+
+  return {
+    props: {
+      posts: posts.slice(0, MAX_COUNT),
+    },
+  };
 }
